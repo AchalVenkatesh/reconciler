@@ -1,35 +1,33 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import fs from 'fs';
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fs = require('fs')
 
 const app=express();
 
 app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
-var todos = fs.readFileSync("todos.json","utf-8")
-todos.
+
+var todos = JSON.parse(fs.readFileSync("todos.json", "utf-8"));
 
 app.get('/',(req,res)=>{
     res.json(todos)
 })
 
 app.post('/',(req,res)=>{
-    var title = req.body.title;
-    var description = req.body.description;
-    var id = todos[(todos.length - 1)].id;
-    if(todos.length == 0){
-     todos.append({
-        title  : title,
-        description : description,
-        id : 1
-    })   
+    console.log(req.body);
+    const newTodo = {
+        id: Math.floor(Math.random() * 1000000),
+        title: req.body.title,
+        description: req.body.description
     }
-    else{
-    todos.append({
-        title  : title,
-        description : description,
-        id: id + 1
-    })}
+    todos.push(newTodo)
+    console.log(todos)
+    fs.writeFileSync('todos.json',JSON.stringify(todos));
+    res.status(204).send(newTodo)
 })
 
 app.delete('/',(req,res)=>{
@@ -37,4 +35,6 @@ app.delete('/',(req,res)=>{
     todos.splice(todoIndex,1);
 })
 
-app.listen(3001);
+app.listen(3001,()=>{
+    console.log("App listening at 3001")
+});

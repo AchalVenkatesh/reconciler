@@ -1,3 +1,5 @@
+const error = require('error')
+
 function onClick(){
     title = document.getElementById("title")
     description = document.getElementById("description")
@@ -13,6 +15,7 @@ function onClick(){
             "Content-type":"application/json"
         }
     }).then(callback)
+    .then(error=> console.log("Fetch error:",error))
 }
 
 function callback(resp){
@@ -29,12 +32,18 @@ function parsedResponse(data){
    var break1 = document.createElement("br")
 
    var grandchildElement2 = document.createElement("span")
+   var head2 = document.createElement("h2")
    grandchildElement2 = data.description;
    var break2 = document.createElement("br")
 
    var grandchildElement3 = document.createElement("button");
     grandchildElement3 = "Delete";
     grandchildElement3.setAttribute("onClick","deleteTodo("+data.id+")");
+
+    childElement.appendChild(grandchildElement1);
+    childElement.appendChild(grandchildElement2);
+    childElement.appendChild(grandchildElement3);
+    parentElement.appendChild(childElement);
 }
 
 function deleteTodo(id){
@@ -44,4 +53,5 @@ function deleteTodo(id){
         var parentElement = document.getElementById("mainArea");
         parentElement.removeChild()
     })
+    .then(error=> console.log("Fetch error:",error))
 }
