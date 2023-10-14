@@ -11,7 +11,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
 
-var todos = JSON.parse(fs.readFileSync("todos.json", "utf-8"));
+try {
+  var todos = JSON.parse(fs.readFileSync("todos.json", "utf-8"));
+} catch (error) {
+  console.log("Error reading or parsing 'todos.json':", error);
+  // Handle the error appropriately, e.g., initialize 'todos' with an empty array
+  var todos = [];
+}
+
 
 app.get('/',(req,res)=>{
     res.json(todos)
@@ -27,12 +34,16 @@ app.post('/',(req,res)=>{
     todos.push(newTodo)
     console.log(todos)
     fs.writeFileSync('todos.json',JSON.stringify(todos));
-    res.status(204).send(newTodo)
+    res.status(201).send(newTodo)
 })
 
-app.delete('/',(req,res)=>{
-    var todoIndex = todos.findIndex(test => test.id == parseInt(req.params.id))
+app.delete('/:id',(req,res)=>{
+    var todoIndex = todos.findIndex((test) => {
+        return test.id == parseInt((req.params.id).substring(1),10)})
+    console.log(todoIndex)
     todos.splice(todoIndex,1);
+    fs.writeFileSync("todos.json",JSON.stringify(todos))
+    console.log(todos)
 })
 
 app.listen(3001,()=>{
