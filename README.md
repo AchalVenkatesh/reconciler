@@ -1,6 +1,6 @@
 # Reconciler
 A simple reconciler which updates the DOM in real time, written in VanillaJS.
-I know, ReactJS does it in a single line, but I like the Vanilla baby :full_moon_with_face:😏
+I know, ReactJS does it in a single line, but I like it Vanilla baby :full_moon_with_face:😏
 
 ## Getting Started
 Ok, so you actually want to see if it works? Ok, fine then.
